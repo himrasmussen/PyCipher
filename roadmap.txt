@@ -1,0 +1,6 @@
+Ciphers
+    Homophonic
+    Autokey
+
+Input methods for message and key
+    text files
