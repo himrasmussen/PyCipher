@@ -19,8 +19,9 @@ class Menu:
                 self.cipher = int(input("Enter a number please: "))
                 self.cipher = self.ciphers[self.cipher]	
 
-        def get_key(self):
-            self.key = input("Enter your key please: ")
+        def get_key(self): # if homophonic: popup file explorer for key file selection
+            if self.cipher != "homophonic substitution":
+                self.key = input("Enter your key please: ")
 
         def get_msg(self):
             self.msg = input("Enter your message please: ")
