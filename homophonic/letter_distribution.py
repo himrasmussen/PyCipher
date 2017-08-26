@@ -9,6 +9,7 @@ class LangData:
 
         # get word list
         def get_word_list(self):
+            print("select your word list (stored in the 'word list' folder")
             Tk().withdraw()
             self.word_list = askopenfilename()
 
