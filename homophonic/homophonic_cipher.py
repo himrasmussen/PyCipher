@@ -11,37 +11,10 @@ from homophonic_table_creator import TableCreator
 from letter_distribution import LangData
 
 class HomophonicCipher(CryptoBase):
-    def __init__(self, *args, **kwargs):
-        self.has_table = None
-        self.key_backup = {}
+    def __init__(self, key_file, *args, **kwargs):
+        self.key_file = key_file
         super(HomophonicCipher, self).__init__(*args, **kwargs)
         
-    # check if the user has a homophonic substitution table and act accordingly
-    def does_user_have_the_table(self):
-        choices = ["no", "yes"]
-        print("Do you have a homophonic substitution table?")
-        for idx, choice in enumerate(choices):
-            print("{}: {}".format(idx, choice))
-        self.has_table = choices[int(input("Enter a number please: "))] # yes or no
-        
-    # if user has table, use it, else make it
-    def get_or_make_table(self): 
-
-        # if the user has the table, ask for the absolute path to it
-        if self.has_table == "yes":
-            
-            # create a file explorer windows for user to select the key file
-            print("Select your homophonic substitution table")
-            Tk().withdraw() # remove excess windows
-            self.key_file = askopenfilename() # opens a dialog
-        else:
-            print("You now select your language word list")
-            langdata = LangData()
-            langdata.main()            
-            TableCreator(langdata.letter_distribution).excecute()
-            self.has_table = "yes"
-            self.get_or_make_table()
-
     # import the homophonic letter substitution table
     def import_substitution_table(self):
         with open(self.key_file) as f:

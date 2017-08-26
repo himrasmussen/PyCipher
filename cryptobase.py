@@ -1,5 +1,6 @@
 import string
 
+
 class CryptoBase:
     def __init__(self, msg, key, mode):
         self.msg = msg.lower()
