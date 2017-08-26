@@ -1,7 +1,8 @@
 # a homophonic cipher
 # needs to have a homophoinic letter substitution table
+import sys; sys.path.append(".."); sys.path.append("homophonic")
 
-import sys; sys.path.append("..")
+import copy
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 
@@ -42,7 +43,7 @@ class HomophonicCipher(CryptoBase):
             self.get_or_make_table()
 
     # import the homophonic letter substitution table
-    def import_substituion_table(self):
+    def import_substitution_table(self):
         with open(self.key_file) as f:
             self.key = {} 
             table_data_lines = f.read().splitlines()
@@ -52,20 +53,20 @@ class HomophonicCipher(CryptoBase):
                 cur_letter = line[0]       # extract letter
                 numbers = line[2:].split() # extract numbers
                 self.key[cur_letter] = numbers
-                self.key_backup[cur_letter] = numbers  # create a backup of the key for use for encrypting
-
+            
+            # make a backup key for use later
+            self.key_backup = copy.deepcopy(self.key)
     # encrypt the message 
     def encrypt(self):
-        # we need a pointer for each letter which keeps track of which number we should substitute it with
-        letter_number_tracker = {letter:0 for letter in self.key.keys()}
 
+        print(self.msg)
         # encrypt every character in the message
         for char in self.msg:
-            self.new_msg += self.key[char].pop() if char in self.alphabet else char
-                        
-            # if all the numbers for the letter have been used, reinitialize the numbers
-            if self.key[char] == []:
-                self.key[char] = self.key_backup[char]
+            if char in self.alphabet: 
+                    self.new_msg += self.key[char].pop() if char in self.alphabet else char
+                    # if all the numbers for the letter have been used, reinitialize the numbers
+                    if not self.key[char]: 
+                        self.key[char] = self.key_backup[char]
 
             self.new_msg += " "
     # decrypt the message 
@@ -86,17 +87,17 @@ class HomophonicCipher(CryptoBase):
         self.done()
 
 if __name__ == "__main__":
-    cipher = HomophonicCipher(key="foo", msg="bla", mode="encrypt")
+    cipher = HomophonicCipher(key="foo", msg="bla bla bla", mode="encrypt")
     cipher.does_user_have_the_table()
     cipher.get_or_make_table()
-    cipher.import_substituion_table()
+    cipher.import_substitution_table()
     cipher.excecute(cipher.mode) 
 
 
-    cipher = HomophonicCipher(key="foo", msg="84 4 71", mode="decrypt")
+    cipher = HomophonicCipher(key="foo", msg=cipher.new_msg, mode="decrypt")
     cipher.does_user_have_the_table()
     cipher.get_or_make_table()
-    cipher.import_substituion_table()
+    cipher.import_substitution_table()
     cipher.excecute(cipher.mode) 
 
 
