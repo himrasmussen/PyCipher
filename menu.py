@@ -24,6 +24,7 @@ class Menu:
                 self.key = input("Enter your key please: ")
 
         def get_msg(self):
+            # legg til mulighet for å velge en fil
             self.msg = input("Enter your message please: ")
 
         def main(self):
